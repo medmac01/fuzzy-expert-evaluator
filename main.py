@@ -49,47 +49,34 @@ evaluation = FuzzyVariable(
 
 rules = [
     FuzzyRule(
-        premise=[
-            ("results", "Moyen"),
-            ("AND", "methods", "Mediocre")
-        ],
-        consequence=[("evaluation", "Mauvais")]
+        premise=[("results", "Moyen"),("AND", "methods", "Mediocre")],
+        consequence=[("evaluation", "Mauvais")],
+        cf=0.4
     ),
     FuzzyRule(
-        premise=[
-            ("results", "Moyen"),
-            ("AND", "methods", "Excellent")
-        ],
-        consequence=[("evaluation", "Bon")]
+        premise=[("results", "Moyen"),("AND", "methods", "Excellent")],
+        consequence=[("evaluation", "Bon")],
+        cf=0.8
     ),
     FuzzyRule(
-        premise=[
-            ("results", "Mediocre"),
-            ("AND", "methods", "Moyen")
-        ],
-        consequence=[("evaluation", "Mauvais")]
+        premise=[("results", "Mediocre"),("AND", "methods", "Moyen")],
+        consequence=[("evaluation", "Mauvais")],
+        cf=0.3
     ),
     FuzzyRule(
-        premise=[
-            ("results", "Excellent"),
-            ("AND", "methods", "Excellent"),
-            ("AND", "presentation", "Excellent")
-        ],
-        consequence=[("evaluation", "Excellent")]
+        premise=[("results", "Excellent"),("AND", "methods", "Excellent"),("AND", "presentation", "Excellent")],
+        consequence=[("evaluation", "Excellent")],
+        cf=0.9
     ),
     FuzzyRule(
-        premise=[
-            ("results", "Mediocre"),
-            ("OR", "methods", "Moyen")
-        ],
-        consequence=[("evaluation", "Moyen")]
+        premise=[("results", "Mediocre"),("OR", "methods", "Moyen")],
+        consequence=[("evaluation", "Moyen")],
+        cf=0.85
     ),
     FuzzyRule(
-        premise=[
-            ("results", "Moyen"),
-            ("OR", "methods", "Mediocre")
-        ],
-        consequence=[("evaluation", "Mediocre")]
+        premise=[("results", "Moyen"),("OR", "methods", "Mediocre")],
+        consequence=[("evaluation", "Mediocre")],
+        cf=0.7
     )
 ]
 
@@ -100,22 +87,16 @@ def main():
     results.plot()
     methods.plot()
     presentation.plot()
-    model = DecompositionalInference(
-    and_operator="min",
-    or_operator="max",
-    implication_operator="Rc",
-    composition_operator="max-min",
-    production_link="max",
-    defuzzification_operator="cog",)
+    model = DecompositionalInference(and_operator="min",or_operator="max",implication_operator="Rc",
+                                     composition_operator="max-min",production_link="max",defuzzification_operator="cog")
 
-    model({'results': results, 'methods': methods, 'presentation': presentation, 'evaluation':evaluation},
+    print(model({'results': results, 'methods': methods, 'presentation': presentation, 'evaluation':evaluation},
           rules,
-          results=12, methods=15, presentation=18)
+          results=12, methods=6, presentation=19))
     
-    print(model.infered_cf)
     model.plot({'results': results, 'methods': methods, 'presentation': presentation, 'evaluation':evaluation},
           rules,
-          results=12, methods=15, presentation=18)
+          results=12, methods=6, presentation=19)
     plt.show()
 
 
